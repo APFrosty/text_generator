@@ -48,7 +48,7 @@ def save_json_dictionnary_in_file(dictionnary, filename):
 
 folder = sys.argv[1]
 n = int(sys.argv[2])
-output = "model_" + str(n) + ".json"
+output = sys.argv[3]
 
 # Calculate frequency map
 file_list = get_file_list(folder)
