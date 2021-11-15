@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import re
 from pathlib import Path
@@ -23,6 +25,7 @@ def remove_punctuation(text):
     text = re.sub('\s{2,}| {2,}', " ", text)
     return text
 
+# if pair in list and key = arg return true
 def in_pair_of_list(value, l):
     for pair in l:
         if pair[0] == value:
@@ -43,7 +46,8 @@ def save_dictionnary_in_file(dictionnary, filename):
 
 def save_json_dictionnary_in_file(dictionnary, filename):
     file = open(filename, "w", encoding="utf-8")
-    json.dump(dictionnary, file, ensure_ascii=False)
+    # json.dump(dictionnary, file, ensure_ascii=False)
+    file.write(json.dumps(dictionnary, ensure_ascii=False))
     file.close()
 
 folder = sys.argv[1]
