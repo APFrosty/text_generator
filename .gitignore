@@ -1,3 +1,4 @@
 corpus/
 *.model
 tmp_output.txt
+first_words.json

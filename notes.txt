@@ -1,0 +1,12 @@
+On va mettre un flag pour indiquer
+si un mot est en début de phrase
+(regex avec mot précédé par un '. ')
+
+Faire en sorte de récupérer les plus grandes
+occurences de chaque mot pour éviter les
+boucles.
+
+Il faut pas enlever les virgules mais plutot s'en servir pour détecter les débuts de phrases 
+(on considèrera la ',' comme un '.')
+
+

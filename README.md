@@ -1,3 +1,15 @@
+# Generate first words
+
+Syntax : 
+```/first_words.py <input_dir>```
+
+Example :
+```console
+user@host:~/first_words.py corpus/W
+```
+
+Then the first_words.json file is created.
+
 # Generate n-gram language model
 
 Syntax : 
