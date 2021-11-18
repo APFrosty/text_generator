@@ -33,16 +33,16 @@ def in_pair_of_list(value, l):
     return False
 
 def save_dictionnary_in_file(dictionnary, filename):
-    text = ""
     first = True
-    for key in dictionnary:
-        value = dictionnary[key]
-        if not first:
-            text += "\n"  
-        text += str(key) + " : " + str(value)
-        first = False
     with open(filename, "w", encoding="UTF-8") as file:
-        file.write(text)
+        for key in dictionnary:
+            line = ""
+            value = dictionnary[key]
+            if not first:
+                line = "\n"
+            line += str(key) + " : " + str(value)
+            first = False
+            file.write(line)
 
 def save_json_dictionnary_in_file(dictionnary, filename):
     file = open(filename, "w", encoding="utf-8")
@@ -53,6 +53,11 @@ def save_json_dictionnary_in_file(dictionnary, filename):
 folder = sys.argv[1]
 n = int(sys.argv[2])
 output = sys.argv[3]
+
+# Check if correct options
+if n != 2 and n != 3:
+    print("ERROR: n parameter must be 2 or 3!")
+    exit()
 
 # Calculate frequency map
 file_list = get_file_list(folder)
@@ -82,19 +87,18 @@ for file in file_list:
     print(" " + str(size_count / (1000*1000)) + "MB")
 
 print("Sorting frequency map...", end = "")
-frequency_map = dict(sorted(frequency_map.items(), key = lambda item: item[1], reverse=True))
+frequency_map = dict(sorted(frequency_map.items(), key = lambda item: item[1]))
 print(" DONE")
 
-save_dictionnary_in_file(frequency_map, "tmp_output.txt")
+# save_dictionnary_in_file(frequency_map, "tmp_output.txt")
 
 print("Calculating frequency map...", end = "")
 model_map = dict()
 for ngram, frequency in frequency_map.items():
-    if ngram[0] not in model_map:
-        if n == 2:
-            model_map[ngram[0]] = (ngram[1])
-        elif n == 3:
-            model_map[ngram[0]] = (ngram[1], ngram[2])
+    if n == 2:
+        model_map[ngram[0]] = (ngram[1])
+    elif n == 3:
+        model_map[ngram[0]] = (ngram[1], ngram[2])
 print(" DONE")
     
 print("Took %s seconds" % (time.time() - start_time))

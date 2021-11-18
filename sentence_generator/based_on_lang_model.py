@@ -7,16 +7,10 @@ import random   # randint,
 LANG_MODEL_FILENAME = sys.argv[1]
 DESIRED_SENTENCE_LENGTH = int(sys.argv[2])
 
-FIRST_WORDS_FILENAME = 'first_words.json'
-
 # return python object matching json
 def load_json(filename: str):
     with open(filename, 'r', encoding='utf-8') as file:
         return json.loads(file.read())
-
-# # return str
-# def get_starting_word(d: dict):
-#     return random.choice(list(d.keys()))
 
 def get_random_key(dictionnary):
     return random.choice(list(dictionnary.keys()))
