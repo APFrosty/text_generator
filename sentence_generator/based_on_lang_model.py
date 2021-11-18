@@ -18,9 +18,8 @@ def load_json(filename: str):
 # def get_starting_word(d: dict):
 #     return random.choice(list(d.keys()))
 
-# return str
-def get_starting_word(words: list):
-    return random.choice(words)
+def get_random_key(dictionnary):
+    return random.choice(list(dictionnary.keys()))
 
 # return list of str
 def get_next_words(word: str, d: dict):
@@ -28,9 +27,8 @@ def get_next_words(word: str, d: dict):
         return [d[word]]
     return d[word]
 
-first_words = load_json(FIRST_WORDS_FILENAME)
 model = load_json(LANG_MODEL_FILENAME)
-starting_word = get_starting_word(first_words)
+starting_word = get_random_key(model)
 sentence = [starting_word]
 
 while len(sentence) < DESIRED_SENTENCE_LENGTH:
