@@ -1,4 +1,4 @@
-corpus/
 *.model
 tmp_output.txt
-first_words.json
+resources/embeddings-Fr.txt
+resources/TableAssociative

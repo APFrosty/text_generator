@@ -1,0 +1,4 @@
+- [x] Fonction pour lire le template avec les DGP
+- [x] Mettre les queries du prof dans un fichier et faire une fonction pour les lire
+- [x] Ecrire le code pour générer les phrases template pour chaque query
+- [ ]  Faire une blacklist pour ne pas réutiliser les mots déjà utilisés ou les mots en query.

@@ -1,14 +1,5 @@
-# Generate first words
-
-Syntax : 
-```/first_words.py <input_dir>```
-
-Example :
-```console
-user@host:~/first_words.py corpus/W
-```
-
-Then the first_words.json file is created.
+# TODO
+[TODO.md](https://github.com/APFrosty/text_generator/blob/master/TODO.md)
 
 # Generate n-gram language model
 

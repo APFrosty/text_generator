@@ -10,14 +10,13 @@ def euclidian_distance(list_a, list_b):
         sum += (list_a[i] - list_b[i])**2
     return math.sqrt(sum)
 
-# choisi arbitrairement, proposé par le prof
-SGP = "Il n' y a pas_de *NCFS000/littérature/littérature sans *NCMS000/péché/péché ."
+def read_template(filename):
+    with open(filename, 'r', encoding='UTF-8') as file:
+        return file.readlines()
 
-# choisi arbitrairement (on prendra un argument argv par la suite)
-QUERY = 'tristesse'
-
-# récupérer le vecteur d'embeddings dans le fichier pour la query
-query_embeddings = []
+def read_queries(filename):
+    with open(filename, 'r', encoding='UTF-8') as file:
+        return file.read().split()
 
 def generate_embeddings(filename):
     map = {}
@@ -72,9 +71,9 @@ def generate_sentence(template, query, embeddings, lexicon):
         i += 1
     return sentence
 
-
 def fetch_types(template):
-    return ['NCFS000', 'NCMS000']
+    return re.findall(r"\*(\w+)(?:/\w+)?(?:/\w+)?", template)
+
 
 def find_best_word(word_list, embeddings, query):
     best_distance = float("inf")
@@ -91,6 +90,13 @@ def find_best_word(word_list, embeddings, query):
             best_word = word
     return best_word
 
+TEMPLATE = read_template("resources/template_sgp.txt")
+QUERIES = read_queries("resources/queries.txt")
 embeddings = generate_embeddings("resources/embeddings-Fr.txt")
 lexicon = generate_lexicon("resources/TableAssociative")
-print(generate_sentence(SGP, QUERY, embeddings, lexicon))
+
+for query in QUERIES:
+    print(f"~ {query} ~")
+    for sgp in TEMPLATE:
+        print(generate_sentence(sgp, query, embeddings, lexicon), end="")
+    print()
