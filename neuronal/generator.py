@@ -78,13 +78,18 @@ def generate_sentence(template, query, embeddings, lexicon):
     words = []
     blacklist = []
     matches = re.findall(r"\*\w+/(\w+)/(\w+)", template)
+    previous = re.findall(r"(\w+'?) \*\w+/(?:\w+)/(?=\w+)", template)
+    i = 0
     for w1, w2 in matches:
         blacklist.append(w1)
         blacklist.append(w2)
     for type in types:
-        word = find_best_word(lexicon[type], embeddings, query, blacklist)
+        start_with_vowel = previous[i].endswith("'")
+        start_with_consonant = previous[i] == "de" or previous[i] == "le" or previous[i] == "la"
+        word = find_best_word(lexicon[type], embeddings, query, blacklist, start_with_vowel, start_with_consonant)
         blacklist.append(word)
         words.append(word)
+        i += 1
     sentence = str(template)
     parts_to_replace = re.findall(r"\*\w+(?:/\w+)?(?:/\w+)?", template)
     i = 0
@@ -96,13 +101,21 @@ def generate_sentence(template, query, embeddings, lexicon):
 def fetch_types(template):
     return re.findall(r"\*(\w+)(?:/\w+)?(?:/\w+)?", template)
 
-def find_best_word(word_list, embeddings, query, blacklist):
+def is_vowel(character):
+    vowels = ["a", "e", "i", "o", "u", "y"]
+    return character in vowels
+
+def find_best_word(word_list, embeddings, query, blacklist, start_with_vowel, start_with_consonant):
     best_distance = float("inf")
     best_word = None
     for word in word_list:
         if word not in embeddings.keys():
             continue
         if word in blacklist:
+            continue
+        if start_with_vowel and is_vowel(word[0]) == False:
+            continue
+        if start_with_consonant and is_vowel(word[0]):
             continue
         for blacklisted in blacklist:
             ratio = SequenceMatcher(None, word, blacklisted).ratio()

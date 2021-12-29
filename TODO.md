@@ -1,4 +1,8 @@
-- [x] Fonction pour lire le template avec les DGP
+- [x] Fonction pour lire le template avec les SGP
 - [x] Mettre les queries du prof dans un fichier et faire une fonction pour les lire
 - [x] Ecrire le code pour générer les phrases template pour chaque query
-- [ ]  Faire une blacklist pour ne pas réutiliser les mots déjà utilisés ou les mots en query.
+- [x] Faire une blacklist pour ne pas réutiliser les mots déjà utilisés ou les mots en query.
+- [x] Ajouter à la blacklist les mots du template SGP
+- [x] Vérifier si un mot est similaire à un mot de la blacklist
+- [x] Vérifier si le mot doit commencer par une voyelle
+- [x] Vérifier si le mot doit commencer par une consonne
