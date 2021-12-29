@@ -1,4 +1,4 @@
 *.model
 tmp_output.txt
-resources/embeddings-Fr.txt
-resources/TableAssociative
+corpus/
+neuronal/resources/

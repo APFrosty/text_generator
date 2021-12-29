@@ -3,6 +3,7 @@
 from pathlib import Path
 import re
 import math
+import json
 
 def euclidian_distance(list_a, list_b):
     sum = 0.0
@@ -36,7 +37,22 @@ def generate_embeddings(filename):
             i += 1
         map[word] = position
     file.close()
+    saved_dict = open(filename + ".json", "w")
+    json.dump(map, saved_dict)
+    saved_dict.close()
     return map
+
+def fetch_embeddings(filename):
+    embeddings_path = Path(filename + ".json")
+    if embeddings_path.is_file():
+        print("READING JSON FILE")
+        embeddings_file = open(filename + ".json")
+        map = json.loads(embeddings_file.read())
+        embeddings_file.close()
+        return map
+    else:
+        print("GENERATING EMBEDDINGS")
+        return generate_embeddings(filename)
 
 def generate_lexicon(filename):
     map = {}
@@ -90,10 +106,10 @@ def find_best_word(word_list, embeddings, query):
             best_word = word
     return best_word
 
-TEMPLATE = read_template("resources/template_sgp.txt")
+TEMPLATE = read_template("resources/templates_sgp.txt")
 QUERIES = read_queries("resources/queries.txt")
-embeddings = generate_embeddings("resources/embeddings-Fr.txt")
-lexicon = generate_lexicon("resources/TableAssociative")
+embeddings = fetch_embeddings("resources/embeddings-Fr.txt")
+lexicon = generate_lexicon("resources/TableAssociative.txt")
 
 for query in QUERIES:
     print(f"~ {query} ~")
