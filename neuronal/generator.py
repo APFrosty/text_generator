@@ -45,13 +45,11 @@ def generate_embeddings(filename):
 def fetch_embeddings(filename):
     embeddings_path = Path(filename + ".json")
     if embeddings_path.is_file():
-        print("READING JSON FILE")
         embeddings_file = open(filename + ".json")
         map = json.loads(embeddings_file.read())
         embeddings_file.close()
         return map
     else:
-        print("GENERATING EMBEDDINGS")
         return generate_embeddings(filename)
 
 def generate_lexicon(filename):
@@ -77,8 +75,15 @@ def generate_lexicon(filename):
 def generate_sentence(template, query, embeddings, lexicon):
     types = fetch_types(template)
     words = []
+    blacklist = []
+    matches = re.findall(r"\*\w+/(\w+)/(\w+)", template)
+    for w1, w2 in matches:
+        blacklist.append(w1)
+        blacklist.append(w2)
     for type in types:
-        words.append(find_best_word(lexicon[type], embeddings, query))
+        word = find_best_word(lexicon[type], embeddings, query, blacklist)
+        blacklist.append(word)
+        words.append(word)
     sentence = str(template)
     parts_to_replace = re.findall(r"\*\w+(?:/\w+)?(?:/\w+)?", template)
     i = 0
@@ -91,10 +96,12 @@ def fetch_types(template):
     return re.findall(r"\*(\w+)(?:/\w+)?(?:/\w+)?", template)
 
 
-def find_best_word(word_list, embeddings, query):
+def find_best_word(word_list, embeddings, query, blacklist):
     best_distance = float("inf")
     best_word = None
     for word in word_list:
+        if word in blacklist:
+            continue
         if word not in embeddings.keys():
             continue
         if best_word == None:
@@ -104,6 +111,7 @@ def find_best_word(word_list, embeddings, query):
         distance = euclidian_distance(embeddings[query], embeddings[word])
         if distance < best_distance:
             best_word = word
+            best_distance = distance
     return best_word
 
 TEMPLATE = read_template("resources/templates_sgp.txt")
