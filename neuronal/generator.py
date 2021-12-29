@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from os import set_inheritable
 from pathlib import Path
 import re
 import math
@@ -95,7 +96,13 @@ def generate_sentence(template, query, embeddings, lexicon):
     parts_to_replace = re.findall(r"\*\w+(?:/\w+)?(?:/\w+)?", template)
     i = 0
     for p in parts_to_replace:
-        sentence = sentence.replace(p, words[i])
+        first_word = sentence.startswith(p)
+        word = words[i]
+        if(first_word):
+            word[i] = word[i].upper()
+        else:
+            word = word.lower()    
+        sentence = sentence.replace(p, word)
         i += 1
     return sentence
 
