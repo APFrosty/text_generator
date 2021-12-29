@@ -85,8 +85,9 @@ def generate_sentence(template, query, embeddings, lexicon):
         blacklist.append(w2)
     for type in types:
         start_with_vowel = previous[i].endswith("'")
-        start_with_consonant = previous[i] == "de" or previous[i] == "le" or previous[i] == "la"
+        start_with_consonant = previous[i].lower() == "de" or previous[i].lower() == "le" or previous[i].lower() == "la" or previous[i].lower().endswith("_de") or previous[i].lower().endswith("_le") or previous[i].lower().endswith("_la")
         word = find_best_word(lexicon[type], embeddings, query, blacklist, start_with_vowel, start_with_consonant)
+        # print(word + " : " + str(start_with_vowel) + " : " + str(start_with_consonant) + " : " + previous[i])
         blacklist.append(word)
         words.append(word)
         i += 1
@@ -103,7 +104,7 @@ def fetch_types(template):
 
 def is_vowel(character):
     vowels = ["a", "e", "i", "o", "u", "y"]
-    return character in vowels
+    return character.lower() in vowels
 
 def find_best_word(word_list, embeddings, query, blacklist, start_with_vowel, start_with_consonant):
     best_distance = float("inf")
