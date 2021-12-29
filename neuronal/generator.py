@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import math
 import json
+from difflib import SequenceMatcher
 
 def euclidian_distance(list_a, list_b):
     sum = 0.0
@@ -95,15 +96,18 @@ def generate_sentence(template, query, embeddings, lexicon):
 def fetch_types(template):
     return re.findall(r"\*(\w+)(?:/\w+)?(?:/\w+)?", template)
 
-
 def find_best_word(word_list, embeddings, query, blacklist):
     best_distance = float("inf")
     best_word = None
     for word in word_list:
-        if word in blacklist:
-            continue
         if word not in embeddings.keys():
             continue
+        if word in blacklist:
+            continue
+        for blacklisted in blacklist:
+            ratio = SequenceMatcher(None, word, blacklisted).ratio()
+            if ratio > 0.9:
+                continue
         if best_word == None:
             best_word = word
             best_distance = euclidian_distance(embeddings[query], embeddings[word])
