@@ -7,6 +7,7 @@ import time
 import json
 import os
 
+# retourne une liste de str
 def get_file_list(folder):
     file_list = []
     for file in list(Path(folder).rglob("*.pdf.seg")):
@@ -19,6 +20,7 @@ def file_to_string(filename):
         data = file.read().replace('\n', ' ')
     return data
 
+# retourne un str
 def remove_punctuation(text):
     text = re.sub(("[^\wÀ-ÿ'’]"), " ", text)
     text = text.replace("_", " ")
@@ -31,18 +33,6 @@ def in_pair_of_list(value, l):
         if pair[0] == value:
             return True
     return False
-
-def save_dictionnary_in_file(dictionnary, filename):
-    first = True
-    with open(filename, "w", encoding="UTF-8") as file:
-        for key in dictionnary:
-            line = ""
-            value = dictionnary[key]
-            if not first:
-                line = "\n"
-            line += str(key) + " : " + str(value)
-            first = False
-            file.write(line)
 
 def save_json_dictionnary_in_file(dictionnary, filename):
     file = open(filename, "w", encoding="utf-8")

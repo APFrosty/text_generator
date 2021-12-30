@@ -31,3 +31,23 @@ Example :
 user@host:~/text_generator$ sentence_generator/based_on_lang_model.py W_3.model 10
 ['reportez', 'lui', 'le', 'roman', 'd’une', 'impératrice', 'chapitre', 'iii', 'de', 'la']
 ```
+
+# Generate sentences from templates based on neuronal model embeddings
+
+Example :
+```console
+user@host:~/text_generator/neuronal$ generator.py
+~ tristesse ~
+Il n' y a pas_de tristesse sans navrement .
+Il n' y a ni exultante ni tristesse en mélancolie .
+
+...
+
+~ bleu ~
+Il n' y a pas_de bleue sans bleu .
+Il n' y a ni bleue ni scabieuse en bouffette .
+En bleue , la gazouillante scabieuse roussit la plus incarnadine
+La bleue roussit une scabieuse .
+L' outremer de les cannetilles roussit à la bleue ce_que la scabieuse roussit à l' orangé .
+Les gris de cannetilles constellent de la bleue ce_que les burnouss constellent de l' outremer .
+```
