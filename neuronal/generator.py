@@ -7,20 +7,24 @@ import math
 import json
 from difflib import SequenceMatcher
 
+# Measure the euclidian distance between two points
 def euclidian_distance(list_a, list_b):
     sum = 0.0
     for i in range(len(list_a)):
         sum += (list_a[i] - list_b[i])**2
     return math.sqrt(sum)
 
+# Return list of templates from a template file
 def read_template(filename):
     with open(filename, 'r', encoding='UTF-8') as file:
         return file.readlines()
 
+# Return list or queries from a file
 def read_queries(filename):
     with open(filename, 'r', encoding='UTF-8') as file:
         return file.read().split()
 
+# Generate an embedding map from a .txt file and stores it in a file before returning the map
 def generate_embeddings(filename):
     map = {}
     file = open(filename)
@@ -44,6 +48,7 @@ def generate_embeddings(filename):
     saved_dict.close()
     return map
 
+# Check if embedding cache exist and if so generate a map from it and if not generate an embedding map
 def fetch_embeddings(filename):
     embeddings_path = Path(filename + ".json")
     if embeddings_path.is_file():
@@ -54,6 +59,7 @@ def fetch_embeddings(filename):
     else:
         return generate_embeddings(filename)
 
+# Generate lexicon map<grammatical strucuture, list of words> from a file
 def generate_lexicon(filename):
     map = {}
     file = open(filename)
@@ -74,6 +80,10 @@ def generate_lexicon(filename):
     file.close()
     return map
 
+# Generate a sentence from a template, a query, an embedding map and a lexicon map
+# Each used word is blacklisted to avoid using the same word twice
+# Each word already in the SGP template are blacklisted
+# We check if the word must start with a vowel, a consonant, or if such consideration is not required
 def generate_sentence(template, query, embeddings, lexicon):
     types = fetch_types(template)
     words = []
@@ -88,7 +98,6 @@ def generate_sentence(template, query, embeddings, lexicon):
         start_with_vowel = previous[i].endswith("'")
         start_with_consonant = previous[i].lower() == "de" or previous[i].lower() == "le" or previous[i].lower() == "la" or previous[i].lower().endswith("_de") or previous[i].lower().endswith("_le") or previous[i].lower().endswith("_la")
         word = find_best_word(lexicon[type], embeddings, query, blacklist, start_with_vowel, start_with_consonant)
-        # print(word + " : " + str(start_with_vowel) + " : " + str(start_with_consonant) + " : " + previous[i])
         blacklist.append(word)
         words.append(word)
         i += 1
@@ -106,13 +115,17 @@ def generate_sentence(template, query, embeddings, lexicon):
         i += 1
     return sentence
 
+# Retrieve the grammatical types that exist in the given template
 def fetch_types(template):
     return re.findall(r"\*(\w+)(?:/\w+)?(?:/\w+)?", template)
 
+# Check if the given character is a vowel
 def is_vowel(character):
     vowels = ["a", "e", "i", "o", "u", "y"]
     return character.lower() in vowels
 
+# Find the word closest to the query from a list of word
+# Words can be blacklisted, can require starting with a vowel, can require starting with a consonant
 def find_best_word(word_list, embeddings, query, blacklist, start_with_vowel, start_with_consonant):
     best_distance = float("inf")
     best_word = None
@@ -144,6 +157,7 @@ QUERIES = read_queries("resources/queries.txt")
 embeddings = fetch_embeddings("resources/embeddings-Fr.txt")
 lexicon = generate_lexicon("resources/TableAssociative.txt")
 
+# For each pair of query/sgp, we generate a sentence
 for query in QUERIES:
     print(f"~ {query} ~")
     for sgp in TEMPLATE:
